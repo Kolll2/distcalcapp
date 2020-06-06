@@ -24,6 +24,15 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--        javaee-api 8.0.1 подтягивала библиотеку jaxb-api 2.3.0 - которая давала предупреждение при деплое-->
+
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -35,10 +44,11 @@
             <artifactId>liquibase-core</artifactId>
             <version>3.9.0</version>
         </dependency>
-        
+
     </dependencies>
 
     <build>
+        
         <finalName>distancecalculator</finalName>
 
         <plugins>
