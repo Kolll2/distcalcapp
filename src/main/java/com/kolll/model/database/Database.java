@@ -4,9 +4,7 @@ import com.kolll.model.entities.City;
 import com.kolll.model.entities.Distance;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Database {
 
@@ -58,13 +56,13 @@ public class Database {
      * queries to the database
      */
 
-    public List<String> getCities() throws SQLException {
+    public Map<Integer, String> getCities() throws SQLException {
 
         String part1 = "SELECT city_id, name FROM cities";
-        List<String> result = new ArrayList<String>();
+        Map<Integer, String> result = new TreeMap<>();
         resultSet = statement.executeQuery(part1);
         while (resultSet.next()) {
-            result.add(resultSet.getInt(1) + ":" + resultSet.getString(2));
+            result.put(resultSet.getInt(1),resultSet.getString(2));
         }
 
         return result;
@@ -84,7 +82,7 @@ public class Database {
     }
 
 
-    public String getDistance(String fromCity, String toCity) throws SQLException {
+    public Integer getDistance(String fromCity, String toCity) throws SQLException {
         Integer result = 0;
         String part1 = "SELECT distance FROM distances" +
                 " LEFT JOIN cities AS from_city ON distances.from_city=city_id" +
@@ -94,12 +92,12 @@ public class Database {
         if (resultSet.next())
             result = resultSet.getInt(1);
 
-        return result.toString();
+        return result;
     }
 
     public List<Float> getPos(String city) {
         List<Float> result = new ArrayList<>();
-        String part1 = "SELECT latitude, latitude FROM cities" +
+        String part1 = "SELECT latitude, longitude FROM cities" +
                 " WHERE cities.name=\'" + city + "\'";
         try {
             resultSet = statement.executeQuery(part1);
