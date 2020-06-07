@@ -89,7 +89,7 @@ public class Database {
         String part1 = "SELECT distance FROM distances" +
                 " LEFT JOIN cities AS from_city ON distances.from_city=city_id" +
                 " LEFT JOIN cities ON distances.to_city = cities.city_id" +
-                " WHERE from_city.name=\'" + fromCity + "\' AND cities.name=\'" + toCity+"\'";
+                " WHERE from_city.name=\'" + fromCity + "\' AND cities.name=\'" + toCity + "\'";
         resultSet = statement.executeQuery(part1);
         if (resultSet.next())
             result = resultSet.getInt(1);
@@ -97,22 +97,27 @@ public class Database {
         return result.toString();
     }
 
-    public List<Float> getPos(String city) throws SQLException {
+    public List<Float> getPos(String city) {
         List<Float> result = new ArrayList<>();
         String part1 = "SELECT latitude, latitude FROM cities" +
-                " WHERE cities.name=\'" + city +"\'";
-        resultSet = statement.executeQuery(part1);
-        if (resultSet.next()){
-            result.add(resultSet.getFloat(1));
-            result.add(resultSet.getFloat(2));
+                " WHERE cities.name=\'" + city + "\'";
+        try {
+            resultSet = statement.executeQuery(part1);
+            if (resultSet.next()) {
+                result.add(resultSet.getFloat(1));
+                result.add(resultSet.getFloat(2));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
         return result;
     }
 
     private int getCityIdByName(String city) throws SQLException {
         int result = 0;
         String part1 = "SELECT city_id FROM cities" +
-                " WHERE cities.name=\'" + city +"\'";
+                " WHERE cities.name=\'" + city + "\'";
         resultSet = statement.executeQuery(part1);
         if (resultSet.next())
             result = resultSet.getInt(1);
