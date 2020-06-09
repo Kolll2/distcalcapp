@@ -152,4 +152,16 @@ public class Database {
         query.replace(query.lastIndexOf(","), query.length(), ";");
         statement.execute(query.toString());
     }
+
+    public void clearDB(){
+        String query = "TRUNCATE TABLE cities";
+        try {
+            statement.execute(query);
+            query = "TRUNCATE TABLE distances;";
+            statement.execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

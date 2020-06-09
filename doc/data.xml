@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cities>
+    <city>
+        <name>Samara</name>
+        <latitude>55.555</latitude>
+        <longitude>44.4444</longitude>
+    </city>
+    <city>
+        <name>Moscow</name>
+        <latitude>22.555</latitude>
+        <longitude>11.4444</longitude>
+    </city>
+    <city>
+        <name>Samara</name>
+        <latitude>33.555</latitude>
+        <longitude>99.4444</longitude>
+    </city>
+    <distance>
+        <from>1</from>
+        <to>2</to>
+        <distance>500</distance>
+    </distance>
+    <distance>
+        <from>2</from>
+        <to>1</to>
+        <distance>500</distance>
+    </distance>
+</cities>

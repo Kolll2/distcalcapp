@@ -1,16 +1,24 @@
 package com.kolll.model.entities;
 
+import javax.xml.bind.annotation.*;
+
+
+@XmlRootElement(name = "city")
+@XmlType(propOrder = {"name", "latitude", "longitude"})
+@XmlAccessorType(XmlAccessType.FIELD)
 public class City {
+    @XmlTransient
     Long id;
-    String name;
-    Float latitude;
-    Float longitude;
+
+    private String name;
+    private Float latitude;
+    private Float longitude;
 
     public City() {
     }
 
     public City(String name, Float latitude, Float longitude) {
-        this(-1L,name,latitude, longitude);
+        this(-1L, name, latitude, longitude);
     }
 
     public City(Long id, String name, Float latitude, Float longitude) {
