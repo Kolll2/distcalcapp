@@ -3,7 +3,6 @@ package com.kolll.web;
 import com.kolll.service.DataUploadService;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
@@ -18,14 +17,13 @@ public class Upload {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadFile(File file) {
         File tempFile = new File("temp.xml");
-        try(BufferedReader bufferedReader = new BufferedReader(new FileReader(file))){
-            try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(tempFile))){
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+            try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(tempFile))) {
                 int count = 0;
-                while(true) {
+                while (true) {
                     String line = bufferedReader.readLine();
-                    System.out.println(line);
-                    if(count++ <= 4) continue;
-                    if(!bufferedReader.ready()) break;
+                    if (count++ <= 4) continue;
+                    if (!bufferedReader.ready()) break;
                     bufferedWriter.write(line + System.getProperty("line.separator"));
                 }
             }
@@ -33,17 +31,10 @@ public class Upload {
             e.printStackTrace();
         }
 
-        if(DataUploadService.upload(tempFile)){
+        if (DataUploadService.upload(tempFile)) {
             return Response.status(200).build();
         }
         return Response.status(400).build();
     }
 
-    @GET
-    @Path("/save")
-    public Response save() {
-        DataUploadService.save();
-        DataUploadService.savedist();
-        return Response.status(200).build();
-    }
 }

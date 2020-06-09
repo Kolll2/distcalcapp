@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.*;
 @XmlType(propOrder = {"name", "latitude", "longitude"})
 @XmlAccessorType(XmlAccessType.FIELD)
 public class City {
+
     @XmlTransient
     Long id;
 

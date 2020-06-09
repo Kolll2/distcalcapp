@@ -11,18 +11,18 @@
         <longitude>11.4444</longitude>
     </city>
     <city>
-        <name>Samara</name>
+        <name>kazan</name>
         <latitude>33.555</latitude>
         <longitude>99.4444</longitude>
     </city>
     <distance>
         <from>1</from>
         <to>2</to>
-        <distance>500</distance>
+        <distance>1124</distance>
     </distance>
     <distance>
         <from>2</from>
         <to>1</to>
-        <distance>500</distance>
+        <distance>1124</distance>
     </distance>
 </cities>

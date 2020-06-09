@@ -8,7 +8,7 @@ import java.util.TreeMap;
 
 public class DataAccessService {
 
-    public static Integer getDistance (String from, String to){
+    public static Integer getDistance(String from, String to) {
         Integer result = null;
         try {
             result = Database.getInstance().getDistance(from, to);
@@ -18,7 +18,7 @@ public class DataAccessService {
         return result;
     }
 
-    public static Map<Integer, String> getCities (){
+    public static Map<Integer, String> getCities() {
         Map<Integer, String> result = new TreeMap<>();
         try {
             result = Database.getInstance().getCities();

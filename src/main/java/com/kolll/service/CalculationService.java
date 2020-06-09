@@ -21,6 +21,6 @@ public class CalculationService {
         double a = Math.sin(latDelta / 2) * Math.sin(latDelta / 2)
                 + Math.cos(Math.toRadians(city1.get(0))) * Math.cos(Math.toRadians(city2.get(0)))
                 * Math.sin(lonDelta / 2) * Math.sin(lonDelta / 2);
-        return (int) Math.round((EARTH_RADIUS/1000) * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+        return (int) Math.round((EARTH_RADIUS / 1000) * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
     }
 }

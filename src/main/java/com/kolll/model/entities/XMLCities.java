@@ -3,7 +3,7 @@ package com.kolll.model.entities;
 import javax.xml.bind.annotation.*;
 import java.util.List;
 
-@XmlRootElement(name="cities")
+@XmlRootElement(name = "cities")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XMLCities {
 
@@ -17,12 +17,12 @@ public class XMLCities {
         return cities;
     }
 
-    public List<Distance> getDistances() {
-        return distances;
-    }
-
     public void setCities(List<City> cities) {
         this.cities = cities;
+    }
+
+    public List<Distance> getDistances() {
+        return distances;
     }
 
     public void setDistances(List<Distance> distances) {

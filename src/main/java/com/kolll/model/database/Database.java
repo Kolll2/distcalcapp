@@ -8,7 +8,6 @@ import java.util.*;
 
 public class Database {
 
-    //    private static final String url = "jdbc:mysql://localhost:3306/distance-calculator?autoReconnect=true&useSSL=false";
     private static final String url = "jdbc:mysql://localhost:3306/distance-calculator?serverTimezone=Europe/Moscow";
     private static final String user = "root";
     private static final String password = "root";
@@ -62,7 +61,7 @@ public class Database {
         Map<Integer, String> result = new TreeMap<>();
         resultSet = statement.executeQuery(part1);
         while (resultSet.next()) {
-            result.put(resultSet.getInt(1),resultSet.getString(2));
+            result.put(resultSet.getInt(1), resultSet.getString(2));
         }
 
         return result;
@@ -123,11 +122,7 @@ public class Database {
     }
 
     public void insertCities(List<City> cities) throws SQLException {
-        System.out.println("=========================================");
-        System.out.println("insertCities(List<City> cities)");
-        System.out.println(Arrays.toString(cities.toArray()));
 
-//        String part1 = "INSERT INTO cities (name, latitude, longitude) VALUES ";
         StringBuffer query = new StringBuffer("INSERT INTO cities (name, latitude, longitude) VALUES ");
         String part2 = "(\"%s\", \"%s\", \"%s\"),";
 
@@ -139,9 +134,6 @@ public class Database {
     }
 
     public void insertDistances(List<Distance> distances) throws SQLException {
-        System.out.println("=========================================");
-        System.out.println("insertDistances(List<Distance> distances)");
-        System.out.println(Arrays.toString(distances.toArray()));
 
         StringBuffer query = new StringBuffer("INSERT INTO distances (from_city, to_city, distance) VALUES ");
         String part2 = "(\"%s\", \"%s\", \"%s\"),";
@@ -153,11 +145,15 @@ public class Database {
         statement.execute(query.toString());
     }
 
-    public void clearDB(){
-        String query = "TRUNCATE TABLE cities";
+    public void clearDB() {
+        String query = "DELETE FROM distances;";
         try {
             statement.execute(query);
-            query = "TRUNCATE TABLE distances;";
+            query = "ALTER TABLE distances AUTO_INCREMENT=0;";
+            statement.execute(query);
+            query = "DELETE FROM cities";
+            statement.execute(query);
+            query = "ALTER TABLE cities AUTO_INCREMENT=0;";
             statement.execute(query);
         } catch (SQLException e) {
             e.printStackTrace();

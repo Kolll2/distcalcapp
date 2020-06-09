@@ -1,14 +1,11 @@
 package com.kolll.web;
 
-import com.kolll.model.database.Database;
-import com.kolll.model.entities.Distance;
 import com.kolll.service.CalculationService;
 import com.kolll.service.DataAccessService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.sql.SQLException;
 import java.util.*;
 
 @Path("/distance")
@@ -120,40 +117,4 @@ public class Distances {
         }
         return result;
     }
-
-//    Тестовые данные, удалить
-
-    @GET
-    @Path("insert")
-    public Response addDistance() {
-        List<Distance> temp = new ArrayList<>();
-        temp.add(new Distance(1L, 2L, 1062));
-        temp.add(new Distance(2L, 1L, 1062));
-        temp.add(new Distance(1L, 3L, 826));
-        temp.add(new Distance(3L, 1L, 826));
-        temp.add(new Distance(2L, 3L, 364));
-        temp.add(new Distance(3L, 2L, 364));
-
-        try {
-            Database.getInstance().insertDistances(temp);
-            return Response.status(200).entity("Distances added").build();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return Response.status(500).entity("Something went wrong").build();
-    }
-
-    @GET
-    @Path("printdistance")
-    public Response printDistance() {
-        List result = null;
-        try {
-            result = Database.getInstance().getDistances();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        if (result == null) return Response.status(500).entity("Distance DB is empty").build();
-        return Response.status(200).entity(Arrays.toString(result.toArray())).build();
-    }
-
 }

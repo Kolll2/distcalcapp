@@ -2,7 +2,7 @@ package com.kolll.model.entities;
 
 import javax.xml.bind.annotation.*;
 
-@XmlRootElement(name="distance")
+@XmlRootElement(name = "distance")
 @XmlType(propOrder = {"fromCity", "toCity", "distance"})
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Distance {
@@ -11,7 +11,7 @@ public class Distance {
     private Long fromCity;
     @XmlElement(name = "to")
     private Long toCity;
-    @XmlElement(name="distance")
+    @XmlElement(name = "distance")
     private int distance;
 
     public Distance() {
