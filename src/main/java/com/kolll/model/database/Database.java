@@ -1,5 +1,6 @@
 package com.kolll.model.database;
 
+import ch.qos.logback.core.joran.action.Action;
 import com.kolll.model.entities.City;
 import com.kolll.model.entities.Distance;
 
@@ -129,6 +130,7 @@ public class Database {
         for (City city : cities) {
             query.append(String.format(part2, city.getName(), city.getLatitude(), city.getLongitude()));
         }
+
         query.replace(query.lastIndexOf(","), query.length(), ";");
         statement.execute(query.toString());
     }
@@ -141,8 +143,29 @@ public class Database {
         for (Distance distance : distances) {
             query.append(String.format(part2, distance.getFromCity(), distance.getToCity(), distance.getDistance()));
         }
+
         query.replace(query.lastIndexOf(","), query.length(), ";");
         statement.execute(query.toString());
+    }
+
+    public void updateCities(List<City> cities) throws SQLException {
+        String query = "UPDATE cities SET latitude = %s, longitude = %s WHERE name = \"%s\";";
+
+        for (City city : cities) {
+            statement.addBatch(String.format(query, city.getLatitude().toString(), city.getLongitude().toString(), city.getName()));
+        }
+
+        statement.executeBatch();
+    }
+
+    public void updateDistances(List<Distance> distances) throws SQLException {
+        String query = "UPDATE distances SET distance = %d WHERE from_city = \"%s\" AND to_city = \"%s\";";
+
+        for (Distance distance : distances) {
+            statement.addBatch(String.format(query, distance.getDistance(), distance.getFromCity(), distance.getToCity()));
+        }
+
+        statement.executeBatch();
     }
 
     public void clearDB() {

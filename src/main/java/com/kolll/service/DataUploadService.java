@@ -14,9 +14,7 @@ public class DataUploadService {
     public static boolean upload(File tempFile) {
 
         try {
-            JAXBContext jc = JAXBContext.newInstance(XMLCities.class);
-            Unmarshaller unmarshaller = jc.createUnmarshaller();
-            XMLCities cities = (XMLCities) unmarshaller.unmarshal(tempFile);
+            XMLCities cities = unmarshalCities(tempFile);
 
             Database database = Database.getInstance();
             database.clearDB();
@@ -29,4 +27,29 @@ public class DataUploadService {
         }
         return true;
     }
+
+    public static boolean update(File tempFile){
+        try {
+
+            XMLCities cities = unmarshalCities(tempFile);
+
+            Database database = Database.getInstance();
+
+            database.updateCities(cities.getCities());
+            database.updateDistances(cities.getDistances());
+
+        } catch (JAXBException | SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    private static XMLCities unmarshalCities(File tempFile) throws JAXBException {
+        JAXBContext jc = JAXBContext.newInstance(XMLCities.class);
+        Unmarshaller unmarshaller = jc.createUnmarshaller();
+        return (XMLCities) unmarshaller.unmarshal(tempFile);
+    }
+
+
 }

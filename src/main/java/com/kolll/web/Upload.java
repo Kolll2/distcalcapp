@@ -1,10 +1,12 @@
 package com.kolll.web;
 
+import com.kolll.service.DataAccessService;
 import com.kolll.service.DataUploadService;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.*;
@@ -13,9 +15,9 @@ import java.io.*;
 public class Upload {
 
     @POST
-    @Path("")
+    @Path("/{type}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response uploadFile(File file) {
+    public Response uploadFile(File file, @PathParam("type") String type) {
         File tempFile = new File("temp.xml");
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
             try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(tempFile))) {
@@ -31,9 +33,14 @@ public class Upload {
             e.printStackTrace();
         }
 
-        if (DataUploadService.upload(tempFile)) {
-            return Response.status(200).build();
-        }
+        if (type.equals("upload")) {
+            if (DataUploadService.upload(tempFile)) {
+                return Response.status(200).build();
+            }
+        } else if (type.equals("update"))
+            if (DataUploadService.update(tempFile)) {
+                return Response.status(200).build();
+            }
         return Response.status(400).build();
     }
 

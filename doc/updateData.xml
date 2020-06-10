@@ -2,27 +2,27 @@
 <cities>
     <city>
         <name>Samara</name>
-        <latitude>55.555</latitude>
-        <longitude>44.4444</longitude>
+        <latitude>99.555</latitude>
+        <longitude>99.4444</longitude>
     </city>
     <city>
         <name>Moscow</name>
-        <latitude>22.555</latitude>
-        <longitude>11.4444</longitude>
+        <latitude>88.555</latitude>
+        <longitude>77.4444</longitude>
     </city>
     <city>
         <name>Kazan</name>
-        <latitude>33.555</latitude>
-        <longitude>99.4444</longitude>
+        <latitude>87.555</latitude>
+        <longitude>78.4444</longitude>
     </city>
     <distance>
         <from>1</from>
         <to>2</to>
-        <distance>1124</distance>
+        <distance>9999</distance>
     </distance>
     <distance>
         <from>2</from>
         <to>1</to>
-        <distance>1124</distance>
+        <distance>9999</distance>
     </distance>
 </cities>
