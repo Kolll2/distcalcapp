@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cities>
+    <city>
+        <name>Omsk</name>
+        <latitude>99.555</latitude>
+        <longitude>99.4444</longitude>
+    </city>
+    <distance>
+        <from>7</from>
+        <to>9</to>
+        <distance>9999</distance>
+    </distance>
+</cities>
