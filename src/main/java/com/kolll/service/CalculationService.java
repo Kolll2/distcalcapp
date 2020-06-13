@@ -1,20 +1,19 @@
 package com.kolll.service;
 
 import com.kolll.model.database.Database;
+import com.kolll.model.exception.NoCityInDatabaseException;
 
 import java.util.List;
 
 public class CalculationService {
     private static final int EARTH_RADIUS = 6_372_795; // meters
 
-    public static Integer getCrow(String from, String to) {
+    public static Integer getCrow(String from, String to) throws NoCityInDatabaseException {
 
+        System.out.println(" === > " + from);
         List<Float> city1 = Database.getInstance().getPos(from);
+        System.out.println(" === > " + to);
         List<Float> city2 = Database.getInstance().getPos(to);
-
-        //if cities not exist, return -1
-        if (city1.size() != 2 || city2.size() != 2)
-            return -1;
 
         double latDelta = Math.toRadians(city2.get(0) - city1.get(0));
         double lonDelta = Math.toRadians(city2.get(1) - city1.get(1));

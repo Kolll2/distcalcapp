@@ -1,28 +1,29 @@
 package com.kolll.service;
 
 import com.kolll.model.database.Database;
+import com.kolll.model.exception.NoCityInDatabaseException;
 
 import java.sql.SQLException;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class DataAccessService {
 
-    public static Integer getDistance(String from, String to) {
-        Integer result = null;
-        try {
-            result = Database.getInstance().getDistance(from, to);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return result;
+    public static Map<Integer, String> getCities() throws SQLException {
+        return Database.getInstance().getCities();
     }
 
-    public static Map<Integer, String> getCities() {
-        Map<Integer, String> result = new TreeMap<>();
+    public static Integer getDistance(String from, String to) throws NoCityInDatabaseException, SQLException {
+        return Database.getInstance().getDistance(from, to);
+    }
+
+    public static Long getCityIdByName (String cityName){
+        Long result = -1L;
+
         try {
-            result = Database.getInstance().getCities();
+            result = Database.getInstance().getCityIdByName(cityName);
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (NoCityInDatabaseException e) {
             e.printStackTrace();
         }
 
