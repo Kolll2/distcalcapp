@@ -12,7 +12,7 @@ public class Distance {
     @XmlElement(name = "to")
     private Long toCity;
     @XmlElement(name = "distance")
-    private int distance;
+    private Integer distance;
 
     public Distance() {
     }
@@ -31,7 +31,16 @@ public class Distance {
         return toCity;
     }
 
-    public int getDistance() {
+    public Integer getDistance() {
         return distance;
+    }
+
+    @Override
+    public String toString() {
+        return "Distance{" +
+                "fromCity=" + fromCity +
+                ", toCity=" + toCity +
+                ", distance=" + distance +
+                '}';
     }
 }
