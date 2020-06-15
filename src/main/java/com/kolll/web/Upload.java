@@ -45,6 +45,11 @@ public class Upload {
                 return Response.status(200).build();
             }
         }
+//        else if (type.equals("tests")){
+//            if (DataUploadService.unificationStringData(tempFile)) {
+//                return Response.status(200).build();
+//            }
+//        }
         return Response.status(400).build();
     }
 

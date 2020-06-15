@@ -1,9 +1,9 @@
 package com.kolll.service;
 
 import com.kolll.model.database.Database;
-import com.kolll.model.entities.City;
-import com.kolll.model.entities.Distance;
-import com.kolll.model.entities.XMLCities;
+import com.kolll.model.entities.*;
+import com.kolll.model.exception.IncorrectDataWasReceived;
+import com.kolll.model.exception.NoCityInDatabaseException;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -12,6 +12,7 @@ import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class DataUploadService {
 
@@ -24,8 +25,7 @@ public class DataUploadService {
             database.clearDB();
             database.insertCities(cities.getCities());
             database.insertDistances(cities.getDistances());
-
-        } catch (JAXBException | SQLException e) {
+        } catch (JAXBException | SQLException | IncorrectDataWasReceived e) {
             e.printStackTrace();
             return false;
         }
@@ -34,15 +34,13 @@ public class DataUploadService {
 
     public static boolean update(File tempFile) {
         try {
-
             XMLCities cities = unmarshalCities(tempFile);
 
             Database database = Database.getInstance();
 
             database.updateCities(cities.getCities());
             database.updateDistances(cities.getDistances());
-
-        } catch (JAXBException | SQLException e) {
+        } catch (JAXBException | SQLException | IncorrectDataWasReceived e) {
             e.printStackTrace();
             return false;
         }
@@ -57,24 +55,98 @@ public class DataUploadService {
             citiesArray = cities.getCities().toArray(citiesArray);
             mergerCities(citiesArray);
 
+            try {
+                checkDistanceForNull(cities);
+            } catch (IncorrectDataWasReceived incorrectDataWasReceived) {
+                cities = unmarshalCitiesFromString(tempFile);
+            }
+
             Distance[] distancesArray = new Distance[cities.getDistances().size()];
             distancesArray = cities.getDistances().toArray(distancesArray);
             mergingDistances(distancesArray);
 
-        } catch (JAXBException e) {
+        } catch (JAXBException | IncorrectDataWasReceived e) {
             e.printStackTrace();
             return false;
         }
         return true;
-
-
     }
+//
+//    public static boolean unificationStringData(File tempFile) {
+//        try {
+//            XMLCitiesString cities = unmarshalCitiesFromString(tempFile);
+//
+//            City[] citiesArray = new City[cities.getCities().size()];
+//            citiesArray = cities.getCities().toArray(citiesArray);
+//            mergerCities(citiesArray);
+//
+//            DistanceString[] distancesArray = new DistanceString[cities.getDistances().size()];
+//            distancesArray = cities.getDistances().toArray(distancesArray);
+//            mergingStringDistances(distancesArray);
+//        } catch (JAXBException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//        return true;
+//    }
 
-    private static XMLCities unmarshalCities(File tempFile) throws JAXBException {
-        JAXBContext jc = JAXBContext.newInstance(XMLCities.class);
+    /////////////////////////////////////////////
+    //  JAXB unmarshal methods
+    /////////////////////////////////////////////
+
+    private static XMLCities unmarshalCities(File tempFile) throws JAXBException, IncorrectDataWasReceived {
+        JAXBContext jc;
+        XMLCities result;
+        jc = JAXBContext.newInstance(XMLCities.class);
         Unmarshaller unmarshaller = jc.createUnmarshaller();
-        return (XMLCities) unmarshaller.unmarshal(tempFile);
+        result = (XMLCities) unmarshaller.unmarshal(tempFile);
+        System.out.println("# unmarshalCities");
+        System.out.println("## XMLCities: cities " + result.getCities().size() + ", distances " + result.getDistances().size());
+        checkCityForNull(result);
+
+        return result;
     }
+
+    private static void checkCityForNull(XMLCities cities) throws IncorrectDataWasReceived {
+        System.out.println("### checkCityForNull");
+        for (City s : cities.getCities()){
+            System.out.println(s);
+            if (Objects.isNull(s.getName()) ||
+                    Objects.isNull(s.getLatitude()) ||
+                    Objects.isNull(s.getLongitude())){
+                System.out.println(" find Null elements");
+                throw new IncorrectDataWasReceived();
+            }
+        }
+    }
+
+    private static void checkDistanceForNull(XMLCities cities) throws IncorrectDataWasReceived {
+        System.out.println("### checkDistanceForNull");
+        for (Distance d : cities.getDistances()){
+            System.out.println(d);
+            if (Objects.isNull(d.getFromCity()) ||
+                    Objects.isNull(d.getToCity()) ||
+                    Objects.isNull(d.getDistance())){
+                System.out.println(" find Null elements");
+                throw new IncorrectDataWasReceived();
+            }
+        }
+    }
+
+    private static XMLCities unmarshalCitiesFromString(File tempFile) throws JAXBException {
+        JAXBContext jc ;
+        XMLCitiesString result ;
+        jc = JAXBContext.newInstance(XMLCitiesString.class);
+        Unmarshaller unmarshaller = jc.createUnmarshaller();
+        result = (XMLCitiesString) unmarshaller.unmarshal(tempFile);
+        System.out.println("# unmarshalCities");
+        System.out.println("## XMLCities: cities " + result.getCities().size() + ", distances " + result.getDistances().size());
+        return toXMLCities(result);
+    }
+
+    /////////////////////////////////////////////
+    //  Combining the received data with the database
+    /////////////////////////////////////////////
 
     public static void mergerCities(City... cities) {
         List<City> insertList = new ArrayList<>();
@@ -95,18 +167,24 @@ public class DataUploadService {
         }
     }
 
-
     public static void mergingDistances(Distance ... distances) {
+        System.out.println("##### mergingDistances");
         List<Distance> insertList = new ArrayList<>();
         List<Distance> updateList = new ArrayList<>();
 
         for (Distance distance : distances) {
+            System.out.println(Database.getInstance().checkExistenceDistance(distance.getFromCity(), distance.getToCity()) +
+                   " " + distance.toString());
             if (Database.getInstance().checkExistenceDistance(distance.getFromCity(), distance.getToCity())) {
                 updateList.add(distance);
             } else {
                 insertList.add(distance);
             }
         }
+
+        System.out.println("Update :" + updateList.size());
+        System.out.println("Insert :" + insertList.size());
+
 
         try {
             Database.getInstance().insertDistances(insertList);
@@ -116,5 +194,47 @@ public class DataUploadService {
         }
     }
 
+    /////////////////////////////////////////////
+    //  Service
+    /////////////////////////////////////////////
 
+    private static void mergingStringDistances(DistanceString[] distancesArray) {
+        mergingDistances(distanceStringToDistance (distancesArray));
+    }
+
+    private static Distance[] distanceStringToDistance(DistanceString[] distancesArray) {
+        Distance[] result = new Distance[distancesArray.length];
+
+        for (int i = 0; i < distancesArray.length; i++){
+            try {
+                result[i] = new Distance(Database.getInstance().getCityIdByName(distancesArray[i].getFromCity()),
+                Database.getInstance().getCityIdByName(distancesArray[i].getToCity()),
+                distancesArray[i].getDistance());
+            } catch (SQLException | NoCityInDatabaseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
+
+    private static XMLCities toXMLCities(XMLCitiesString xmlCitiesString) {
+        System.out.println("#### toXMLCities");
+        XMLCities result = new XMLCities();
+        result.setCities(xmlCitiesString.getCities());
+        List<Distance> dist = new ArrayList<>();
+
+        for (DistanceString ds : xmlCitiesString.getDistances()) {
+            try {
+                dist.add(new Distance(Database.getInstance().getCityIdByName(ds.getFromCity()),
+                        Database.getInstance().getCityIdByName(ds.getToCity()),
+                        ds.getDistance()));
+                System.out.println(dist.toString());
+            } catch (SQLException | NoCityInDatabaseException e) {
+                e.printStackTrace();
+            }
+        }
+        result.setDistances(dist);
+        return result;
+    }
 }

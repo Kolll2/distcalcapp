@@ -23,7 +23,8 @@
             <column name="from_city"  type="BIGINT">
                 <constraints nullable="false"
                              foreignKeyName="FK_From_City"
-                             referencedTableName="cities" referencedColumnNames="city_id" deleteCascade="true"/>
+                             referencedTableName="cities" referencedColumnNames="city_id"
+                             deleteCascade="true"/>
             </column>
             <column name="to_city" type="BIGINT">
             <constraints nullable="false"
