@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cities>
+    <city>
+        <name>Kiev</name>
+        <latitude>00.555</latitude>
+        <longitude>11.4444</longitude>
+    </city>
+    <city>
+        <name>Berlin</name>
+        <latitude>22.555</latitude>
+        <longitude>33.4444</longitude>
+    </city>
+    <city>
+        <name>Paris</name>
+        <latitude>44.555</latitude>
+        <longitude>55.4444</longitude>
+    </city>
+    <city>
+        <name>Kinel</name>
+        <latitude>66.555</latitude>
+        <longitude>66.4444</longitude>
+    </city>
+    <distance>
+        <from>Samara</from>
+        <to>Berlin</to>
+        <distance>4571</distance>
+    </distance>
+    <distance>
+        <from>Kinel</from>
+        <to>Samara</to>
+        <distance>43</distance>
+    </distance>
+    <distance>
+        <from>Kiev</from>
+        <to>Samara</to>
+        <distance>2155</distance>
+    </distance>
+</cities>
