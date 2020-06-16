@@ -51,34 +51,26 @@ public class DataUploadService {
         jc = JAXBContext.newInstance(XMLCities.class);
         Unmarshaller unmarshaller = jc.createUnmarshaller();
         result = (XMLCities) unmarshaller.unmarshal(tempFile);
-        System.out.println("# unmarshalCities");
-        System.out.println("## XMLCities: cities " + result.getCities().size() + ", distances " + result.getDistances().size());
         checkCityForNull(result);
 
         return result;
     }
 
     private static void checkCityForNull(XMLCities cities) throws IncorrectDataWasReceived {
-        System.out.println("### checkCityForNull");
         for (City s : cities.getCities()){
-            System.out.println(s);
             if (Objects.isNull(s.getName()) ||
                     Objects.isNull(s.getLatitude()) ||
                     Objects.isNull(s.getLongitude())){
-                System.out.println(" find Null elements");
                 throw new IncorrectDataWasReceived();
             }
         }
     }
 
     private static void checkDistanceForNull(XMLCities cities) throws IncorrectDataWasReceived {
-        System.out.println("### checkDistanceForNull");
         for (Distance d : cities.getDistances()){
-            System.out.println(d);
             if (Objects.isNull(d.getFromCity()) ||
                     Objects.isNull(d.getToCity()) ||
                     Objects.isNull(d.getDistance())){
-                System.out.println(" find Null elements");
                 throw new IncorrectDataWasReceived();
             }
         }
@@ -90,8 +82,7 @@ public class DataUploadService {
         jc = JAXBContext.newInstance(XMLCitiesString.class);
         Unmarshaller unmarshaller = jc.createUnmarshaller();
         result = (XMLCitiesString) unmarshaller.unmarshal(tempFile);
-        System.out.println("# unmarshalCities");
-        System.out.println("## XMLCities: cities " + result.getCities().size() + ", distances " + result.getDistances().size());
+
         return toXMLCities(result);
     }
 
@@ -119,23 +110,16 @@ public class DataUploadService {
     }
 
     public static void mergingDistances(Distance ... distances) {
-        System.out.println("##### mergingDistances");
         List<Distance> insertList = new ArrayList<>();
         List<Distance> updateList = new ArrayList<>();
 
         for (Distance distance : distances) {
-            System.out.println(Database.getInstance().checkExistenceDistance(distance.getFromCity(), distance.getToCity()) +
-                   " " + distance.toString());
             if (Database.getInstance().checkExistenceDistance(distance.getFromCity(), distance.getToCity())) {
                 updateList.add(distance);
             } else {
                 insertList.add(distance);
             }
         }
-
-        System.out.println("Update :" + updateList.size());
-        System.out.println("Insert :" + insertList.size());
-
 
         try {
             Database.getInstance().insertDistances(insertList);
@@ -159,7 +143,6 @@ public class DataUploadService {
                 dist.add(new Distance(Database.getInstance().getCityIdByName(ds.getFromCity()),
                         Database.getInstance().getCityIdByName(ds.getToCity()),
                         ds.getDistance()));
-                System.out.println(dist.toString());
             } catch (SQLException | NoCityInDatabaseException e) {
                 e.printStackTrace();
             }

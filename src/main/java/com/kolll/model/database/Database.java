@@ -142,12 +142,10 @@ public class Database {
         Long result = 0L;
         String part1 = "SELECT city_id FROM cities" +
                 " WHERE cities.name=\'" + city + "\'";
-        System.out.println(part1);
         resultSet = statement.executeQuery(part1);
         if (resultSet.next())
             result = resultSet.getLong(1);
         else throw new NoCityInDatabaseException();
-        System.out.println("   RESULT = "+result);
         return result;
     }
 
@@ -177,7 +175,6 @@ public class Database {
         }
 
         query.replace(query.lastIndexOf(","), query.length(), ";");
-        System.out.println(query.toString());
         statement.execute(query.toString());
     }
 
@@ -199,7 +196,6 @@ public class Database {
 
         for (Distance distance : distances) {
             statement.addBatch(String.format(query, distance.getDistance(), distance.getFromCity(), distance.getToCity()));
-            System.out.println(String.format(query, distance.getDistance(), distance.getFromCity(), distance.getToCity()));
         }
 
         statement.executeBatch();

@@ -10,9 +10,7 @@ public class CalculationService {
 
     public static Integer getCrow(String from, String to) throws NoCityInDatabaseException {
 
-        System.out.println(" === > " + from);
         List<Float> city1 = Database.getInstance().getPos(from);
-        System.out.println(" === > " + to);
         List<Float> city2 = Database.getInstance().getPos(to);
 
         double latDelta = Math.toRadians(city2.get(0) - city1.get(0));
