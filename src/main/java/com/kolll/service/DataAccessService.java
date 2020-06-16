@@ -16,17 +16,4 @@ public class DataAccessService {
         return Database.getInstance().getDistance(from, to);
     }
 
-    public static Long getCityIdByName (String cityName){
-        Long result = -1L;
-
-        try {
-            result = Database.getInstance().getCityIdByName(cityName);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (NoCityInDatabaseException e) {
-            e.printStackTrace();
-        }
-
-        return result;
-    }
 }

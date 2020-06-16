@@ -38,11 +38,8 @@ public class Database {
         try {
             ctx = new InitialContext();
             ds = (DataSource) ctx.lookup("java:/magenta/datasource/test-distance-calculator");
-//            connection = DriverManager.getConnection(url, user, password);
             connection = ds.getConnection();
-            System.out.println("$$$$  " + connection);
             statement = connection.createStatement();
-            System.out.println("$$$$  " + statement);
         } catch (SQLException | NamingException ex) {
             ex.printStackTrace();
         }
@@ -273,7 +270,6 @@ public class Database {
         } catch (NoCityInDatabaseException e) {
             e.printStackTrace();
         }
-
 
     }
 

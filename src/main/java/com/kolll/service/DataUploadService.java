@@ -16,37 +16,6 @@ import java.util.Objects;
 
 public class DataUploadService {
 
-    public static boolean upload(File tempFile) {
-        try {
-            XMLCities cities = unmarshalCities(tempFile);
-
-            Database database = Database.getInstance();
-
-            database.clearDB();
-            database.insertCities(cities.getCities());
-            database.insertDistances(cities.getDistances());
-        } catch (JAXBException | SQLException | IncorrectDataWasReceived e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-    public static boolean update(File tempFile) {
-        try {
-            XMLCities cities = unmarshalCities(tempFile);
-
-            Database database = Database.getInstance();
-
-            database.updateCities(cities.getCities());
-            database.updateDistances(cities.getDistances());
-        } catch (JAXBException | SQLException | IncorrectDataWasReceived e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
     public static boolean unification(File tempFile) {
         try {
             XMLCities cities = unmarshalCities(tempFile);
@@ -71,24 +40,6 @@ public class DataUploadService {
         }
         return true;
     }
-//
-//    public static boolean unificationStringData(File tempFile) {
-//        try {
-//            XMLCitiesString cities = unmarshalCitiesFromString(tempFile);
-//
-//            City[] citiesArray = new City[cities.getCities().size()];
-//            citiesArray = cities.getCities().toArray(citiesArray);
-//            mergerCities(citiesArray);
-//
-//            DistanceString[] distancesArray = new DistanceString[cities.getDistances().size()];
-//            distancesArray = cities.getDistances().toArray(distancesArray);
-//            mergingStringDistances(distancesArray);
-//        } catch (JAXBException e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//        return true;
-//    }
 
     /////////////////////////////////////////////
     //  JAXB unmarshal methods
@@ -198,28 +149,7 @@ public class DataUploadService {
     //  Service
     /////////////////////////////////////////////
 
-    private static void mergingStringDistances(DistanceString[] distancesArray) {
-        mergingDistances(distanceStringToDistance (distancesArray));
-    }
-
-    private static Distance[] distanceStringToDistance(DistanceString[] distancesArray) {
-        Distance[] result = new Distance[distancesArray.length];
-
-        for (int i = 0; i < distancesArray.length; i++){
-            try {
-                result[i] = new Distance(Database.getInstance().getCityIdByName(distancesArray[i].getFromCity()),
-                Database.getInstance().getCityIdByName(distancesArray[i].getToCity()),
-                distancesArray[i].getDistance());
-            } catch (SQLException | NoCityInDatabaseException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return result;
-    }
-
     private static XMLCities toXMLCities(XMLCitiesString xmlCitiesString) {
-        System.out.println("#### toXMLCities");
         XMLCities result = new XMLCities();
         result.setCities(xmlCitiesString.getCities());
         List<Distance> dist = new ArrayList<>();
